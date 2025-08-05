@@ -1,5 +1,5 @@
-# working-with-forms-angular
-The project is aimed at building in-depth understanding about how to work with forms in Angular
+# working-with-reactive-forms
+This project is aimed at getting an in-depth understanding about how reactive forms work in Angular
 
 # Forms
 
