@@ -1,3 +1,6 @@
+# working-with-forms-angular
+The project is aimed at building in-depth understanding about how to work with forms in Angular
+
 # Forms
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.0.
