@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  AbstractControl,
+  FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
@@ -13,6 +15,20 @@ if (savedForm) {
   const loadedForm = JSON.parse(savedForm);
   initialEmailValue = loadedForm.email;
 }
+
+function equalValues(controlName1: string, controlName2: string) {
+  //here equalValues is a factory function that produces/returns a validator function, factory functions are executed
+  return (control: AbstractControl) => {
+    const val1 = control.get(controlName1)?.value;
+    const val2 = control.get(controlName2)?.value;
+
+    if (val1 === val2) {
+      return null;
+    }
+
+    return { valuesNotEqual: true };
+  };
+}
 @Component({
   selector: 'app-signup',
   standalone: true,
@@ -25,14 +41,19 @@ export class SignupComponent implements OnInit {
     email: new FormControl(initialEmailValue, {
       validators: [Validators.email, Validators.required],
     }),
-    passwords: new FormGroup({
-      password: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(6)],
-      }),
-      confirmPassword: new FormControl('', {
-        validators: [Validators.required, Validators.minLength(6)],
-      }),
-    }),
+    passwords: new FormGroup(
+      {
+        password: new FormControl('', {
+          validators: [Validators.required, Validators.minLength(6)],
+        }),
+        confirmPassword: new FormControl('', {
+          validators: [Validators.required, Validators.minLength(6)],
+        }),
+      },
+      {
+        validators: [equalValues('password', 'confirmPassword')],
+      }
+    ),
     firstName: new FormControl('', {
       validators: [Validators.required],
     }),
@@ -58,6 +79,11 @@ export class SignupComponent implements OnInit {
     >('student', {
       validators: [Validators.required],
     }),
+    source: new FormArray([
+      new FormControl(false),
+      new FormControl(false),
+      new FormControl(false),
+    ]),
     agree: new FormControl(false, { validators: [Validators.required] }),
   });
 
@@ -89,8 +115,13 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.form.invalid) {
+      console.log('INVALID FORM!');
+      return;
+    }
     console.log(this.form.controls.email.value);
     console.log(this.form.controls.passwords.controls.password.value);
+    console.log(this.form);
   }
 
   onReset() {
