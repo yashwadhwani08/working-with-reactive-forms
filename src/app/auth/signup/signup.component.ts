@@ -25,9 +25,40 @@ export class SignupComponent implements OnInit {
     email: new FormControl(initialEmailValue, {
       validators: [Validators.email, Validators.required],
     }),
-    password: new FormControl('', {
-      validators: [Validators.required, Validators.minLength(6)],
+    passwords: new FormGroup({
+      password: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(6)],
+      }),
+      confirmPassword: new FormControl('', {
+        validators: [Validators.required, Validators.minLength(6)],
+      }),
     }),
+    firstName: new FormControl('', {
+      validators: [Validators.required],
+    }),
+    lastName: new FormControl('', {
+      validators: [Validators.required],
+    }),
+    address: new FormGroup({
+      street: new FormControl('', {
+        validators: [Validators.required],
+      }),
+      number: new FormControl('', {
+        validators: [Validators.required],
+      }),
+      postalCode: new FormControl('', {
+        validators: [Validators.required],
+      }),
+      city: new FormControl('', {
+        validators: [Validators.required],
+      }),
+    }),
+    role: new FormControl<
+      'student' | 'teacher' | 'employee' | 'founder' | 'other'
+    >('student', {
+      validators: [Validators.required],
+    }),
+    agree: new FormControl(false, { validators: [Validators.required] }),
   });
 
   ngOnInit() {
@@ -51,15 +82,15 @@ export class SignupComponent implements OnInit {
 
   get passwordIsInvalid() {
     return (
-      this.form.controls.password.invalid &&
-      this.form.controls.password.touched &&
-      this.form.controls.password.dirty
+      this.form.controls.passwords.controls.password.invalid &&
+      this.form.controls.passwords.controls.password.touched &&
+      this.form.controls.passwords.controls.password.dirty
     );
   }
 
   onSubmit() {
     console.log(this.form.controls.email.value);
-    console.log(this.form.controls.password.value);
+    console.log(this.form.controls.passwords.controls.password.value);
   }
 
   onReset() {
